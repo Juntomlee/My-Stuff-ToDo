@@ -1,8 +1,9 @@
 # komatodo_app
+- Simple ToDo App with touch of "Kokomato" character
 
 
 ## App Store Link
-https://itunes.apple.com/us/app/koma-todo/id1292154654?mt=8
+- https://itunes.apple.com/us/app/koma-todo/id1292154654?mt=8
 
 
 ## About
