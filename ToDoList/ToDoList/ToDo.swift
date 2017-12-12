@@ -12,23 +12,23 @@ import UIKit
 class ToDo: NSObject, NSCoding{
     var title: String
     var detail: [String]
-    var check: [String]
+    var isCompleted: [Bool]
     
-    init?(title: String, detail: [String], check: [String]){
+    init?(title: String, detail: [String], isCompleted: [Bool]){
         self.title = title
         self.detail = detail
-        self.check = check
+        self.isCompleted = isCompleted
     }
     
     required init(coder decoder: NSCoder) {
         self.title = decoder.decodeObject(forKey: "title") as? String ?? ""
         self.detail = decoder.decodeObject(forKey: "detail") as? [String] ?? []
-        self.check = decoder.decodeObject(forKey: "check") as? [String] ?? []
+        self.isCompleted = decoder.decodeObject(forKey: "isCompleted") as? [Bool] ?? []
     }
     
     func encode(with coder: NSCoder) {
         coder.encode(title, forKey: "title")
         coder.encode(detail, forKey: "detail")
-        coder.encode(check, forKey: "check")
+        coder.encode(isCompleted, forKey: "isCompleted")
     }
 }

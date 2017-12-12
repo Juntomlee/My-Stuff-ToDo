@@ -23,13 +23,13 @@ class ToDoTableViewController: UITableViewController {
     //MARK: Private Methods
     //Setup sample list of ToDo List
     private func loadSampleTodos(){
-        guard let todo1 = ToDo(title: "Practice Swift", detail: ["TableView", "Cell", "Delegate"], check: ["uncheck", "check", "check"]) else {
+        guard let todo1 = ToDo(title: "Practice Swift", detail: ["TableView", "Cell", "Delegate"], isCompleted: [false, true, true]) else {
             fatalError("Unable to instantiate 1")
         }
-        guard let todo2 = ToDo(title: "Laundry", detail: ["Tshirts", "Pants", "Jacket"], check: ["uncheck", "check", "check"]) else {
+        guard let todo2 = ToDo(title: "Laundry", detail: ["Tshirts", "Pants", "Jacket"], isCompleted: [false, true, true]) else {
             fatalError("Unable to instantiate todo2")
         }
-        guard let todo3 = ToDo(title: "Grocery Shopping", detail: ["Fruit", "Scallop", "Chips", "Beer"], check: ["uncheck", "check", "check"]) else {
+        guard let todo3 = ToDo(title: "Grocery Shopping", detail: ["Fruit", "Scallop", "Chips", "Beer"], isCompleted: [false, true, true, true]) else {
             fatalError("Unable to instantiate todo3")
         }
         todoArray += [todo1, todo2, todo3]
@@ -61,9 +61,9 @@ class ToDoTableViewController: UITableViewController {
 
     // Sorting
     func sortList() {
-        todoArray.sort(){$0.check.filter{$0 == "uncheck"}.count > $1.check.filter{$0 == "uncheck"}.count}
-        print(todoArray)
-        tableView.reloadData(); // notify the table view the data has changed
+        todoArray.sort(){$0.isCompleted.filter{$0 == false}.count > $1.isCompleted.filter{$0 == false}.count}
+        // notify the table view the data has changed
+        tableView.reloadData()
     }
     
     // Become FirstResponder when motion detected
@@ -86,13 +86,13 @@ class ToDoTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1 // One section
+        // One section
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return todoArray.count // Total number of todos object
+        // Total number of todos object
+        return todoArray.count
     }
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -116,8 +116,7 @@ class ToDoTableViewController: UITableViewController {
 
                 let todoContent = UNMutableNotificationContent()
                 todoContent.title = todoArray[(selectedIndex?.row)!].title
-                todoContent.subtitle = "You have " + "\(todoArray[(selectedIndex?.row)!].check.filter{$0 == "uncheck"}.count)" + " items left to do."
-                //todoContent.body = "\(todoArray[(selectedIndex?.row)!].detail)"//Removed body for now
+                todoContent.subtitle = "You have " + "\(todoArray[(selectedIndex?.row)!].isCompleted.filter{$0 == false}.count)" + " items left to do."
                 todoContent.badge = 1
                 
                 //Notify user for reminder
@@ -152,20 +151,18 @@ class ToDoTableViewController: UITableViewController {
         
         //assign value to titlelabel
         cell.titleLabel.text = todo.title
-        //print(todo.check)
-        let numberOfItemsLeft = todo.check.filter{$0 == "uncheck"}.count
-        //print(numberOfItemsLeft)
-        if todo.check.isEmpty {
+        let numberOfItemsLeft = todo.isCompleted.filter{$0 == false}.count
+        if todo.isCompleted.isEmpty {
             cell.countLabel.text = "You do not have any item"
             cell.checkBoxButton.isSelected = false
         } else if numberOfItemsLeft == 0 {
             cell.countLabel.text = "You have nothing left to do!"
             cell.checkBoxButton.isSelected = true
         } else if numberOfItemsLeft == 1{
-            cell.countLabel.text = "You have \(todo.check.filter{$0 == "uncheck"}.count) item left"
+            cell.countLabel.text = "You have \(todo.isCompleted.filter{$0 == false}.count) item left"
             cell.checkBoxButton.isSelected = false
         } else if numberOfItemsLeft > 1{
-            cell.countLabel.text = "You have \(todo.check.filter{$0 == "uncheck"}.count) items left"
+            cell.countLabel.text = "You have \(todo.isCompleted.filter{$0 == false}.count) items left"
             cell.checkBoxButton.isSelected = false
         }
         return cell
@@ -191,14 +188,13 @@ class ToDoTableViewController: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        //print(segue.identifier)
 
         switch(segue.identifier ?? "") {
         case "AddItem":
             guard let todoDetailViewController = segue.destination as? ViewController else {
                 fatalError()
             }
-            let newArray = ToDo(title: "", detail: [], check: [])
+            let newArray = ToDo(title: "", detail: [], isCompleted: [])
             todoDetailViewController.todo = newArray
             
         case "ShowDetail":
@@ -214,10 +210,7 @@ class ToDoTableViewController: UITableViewController {
             
             let selectedToDo = todoArray[indexPath.row]
             todoDetailViewController.todo = selectedToDo
-            //print(indexPath.row)
-            //print("test")
-            //print(segue.identifier!)
-            
+
         default:
             fatalError()
         }

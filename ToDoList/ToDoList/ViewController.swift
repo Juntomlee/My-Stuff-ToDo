@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import os.log
 import UserNotifications
 
 class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
@@ -19,7 +18,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var detailedInfoTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBAction func detailCheckButton(_ sender: UIButton) {
-        //sender.isSelected = !sender.isSelected//Toggle button to switch checkmark button
     }
     @IBAction func cancel(_ sender: Any) {
         //if cancel from AddMode, dismiss
@@ -64,7 +62,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         //Assigning each textfield seperately
         if textField == titleTextField{
             navigationItem.title = "\(todo!.title) List"
-            //titleTextField.isHidden = true
         }
         else if textField == detailedInfoTextField {
             detailedInfoTextField.text = textField.text
@@ -73,7 +70,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     //Disable Save button if textfield is empty
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-      //  let text = (titleTextField.text! as NSString).replacingCharacters(in: range, with: string)
         
         if titleTextField.text != ""{
             saveButton.isEnabled = true
@@ -121,23 +117,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         //set todo constant to have value of todoArray
         let myTodo = todo
 
-        //print(myTodo!.detail[indexPath.row])
         if myTodo != nil {
             print(indexPath.row)
             cell.detailLabel.text = myTodo!.detail[indexPath.row]
-            //print(myTodo!.detail[indexPath.row])
         }
         
-        /*
-        if myTodo?.check[indexPath.row] == "uncheck"{
-            cell.accessoryType = .none
-        } else if myTodo?.check[indexPath.row] == "check" {
-            cell.accessoryType = .checkmark
-        }
-         */
-        if myTodo?.check[indexPath.row] == "uncheck" {
+        if myTodo?.isCompleted[indexPath.row] == false {
             cell.detailCheckButton.isSelected = false
-        } else if myTodo?.check[indexPath.row] == "check" {
+        } else if myTodo?.isCompleted[indexPath.row] == true {
             cell.detailCheckButton.isSelected = true
         }
         return cell
@@ -146,20 +133,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.cellForRow(at: indexPath) != nil {
-            //if let myCell = tableView.cellForRow(at: indexPath) {
-            //if myCell.accessoryType == .checkmark {
-            //    myCell.accessoryType = .none
-            //    todo?.check[indexPath.row] = "uncheck"
-            //} else {
-            //    myCell.accessoryType = .checkmark
-            //    todo?.check[indexPath.row] = "check"
-            //}
             if tableView.cellForRow(at: indexPath) != nil {
-                if todo?.check[indexPath.row] == "check" {
-                    todo?.check[indexPath.row] = "uncheck"
+                if todo?.isCompleted[indexPath.row] == true {
+                    todo?.isCompleted[indexPath.row] = false
                     navigationItem.leftBarButtonItem?.isEnabled = false
                 } else {
-                    todo?.check[indexPath.row] = "check"
+                    todo?.isCompleted[indexPath.row] = true
                     navigationItem.leftBarButtonItem?.isEnabled = false
                 }
             }
@@ -178,24 +157,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
         if todo?.detail == nil {
             let detail = detailedInfoTextField.text ?? ""
-            todo = ToDo(title: title, detail: [detail], check: [])
+            todo = ToDo(title: title, detail: [detail], isCompleted: [])
         } else {
-            todo = ToDo(title: title, detail: (todo?.detail)!, check: (todo?.check)!)
+            todo = ToDo(title: title, detail: (todo?.detail)!, isCompleted: (todo?.isCompleted)!)
         }
-        //print("todo.detail", todo?.detail)
     }
     
     @IBAction func addDetailButton(_ sender: Any) {
         let myDetail = detailedInfoTextField.text
-        //print("myDetail", myDetail)
-        //print(todo?.detail)
+
         if detailedInfoTextField.text == ""{
             print("empty textfield")
         } else {
             todo?.detail.append(myDetail!)
-            todo?.check.append("uncheck")
+            todo?.isCompleted.append(false)
         }
-        //print(todo?.detail)
         myTableView.reloadData()
         detailedInfoTextField.text = ""
         view.endEditing(true)
