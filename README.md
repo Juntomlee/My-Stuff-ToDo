@@ -1,5 +1,5 @@
 # komatodo_app
-- Simple ToDo App with touch of "Kokomato" character
+Simple ToDo App with touch of "Kokomato" character
 
 
 ## App Store Link
