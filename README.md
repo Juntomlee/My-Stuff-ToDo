@@ -1,5 +1,5 @@
 # komatodo_app
-Simple ToDo App with touch of "Kokomato" character
+- Simple ToDo App with touch of "Kokomato" character
 
 
 ## App Store Link
@@ -14,8 +14,17 @@ Simple ToDo App with touch of "Kokomato" character
 
 - iOS 11 or later
 
+## Technologies
+
+- UIKit
+- Data Persistance (NSCoding)
+- Motion detection (Shake to sort)
+- Custom tableview cells
+- Gesture recognizer
+
 
 ## App functions
+
 - App can add list of things todo
 - Each list can contain multiple Items
 - User can check off items that's been done
@@ -25,7 +34,7 @@ Simple ToDo App with touch of "Kokomato" character
 
 ## App screenshots
 
-<img src="https://raw.githubusercontent.com/Juntomlee/Feeder/master/Screenshot/ArticleSearch.GIF" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/Feeder/master/Screenshot/Bookmark.GIF" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/Feeder/master/Screenshot/FBShare.GIF" width="250">
+<img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Mainlist.PNG" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Detailitemlist.PNG" width="250">
 
 
 ## Built With
@@ -33,7 +42,7 @@ Simple ToDo App with touch of "Kokomato" character
 * [Xcode](https://developer.apple.com/xcode/) - Xcode
 
 
-## Authorsß
+## Authors
 
 * **Jun Lee** - *Initial work* - [Jun Lee](https://github.com/juntomlee)
 
