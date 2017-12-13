@@ -16,8 +16,8 @@
 
 
 ## Version History
-V1.0: First version
-V1.1: New UI, user can adjust time for reminder, bug fixes
+- V1.0: First version
+- V1.1: New UI, user can adjust time for reminder, bug fixes
 
 
 ## Technologies
