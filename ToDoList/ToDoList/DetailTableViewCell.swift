@@ -9,8 +9,7 @@
 import UIKit
 
 class DetailTableViewCell: UITableViewCell {
-
+    // MARK: Outlets
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var detailCheckButton: UIButton!
-
 }

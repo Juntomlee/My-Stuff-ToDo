@@ -11,30 +11,17 @@ import UserNotifications
 
 class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     // MARK: Properties
-    var todo: ToDo? //Setting a variable "todo" for ToDo class
+    var todo: ToDo?
     
     // MARK: Outlets
-    @IBOutlet weak var myTableView: UITableView!//setting Outlet for myTableView
-    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var addItemButton: UIButton!
     @IBOutlet weak var detailedInfoTextField: UITextField!
+    @IBOutlet weak var myTableView: UITableView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var titleAddButtonOutlet: UIButton!
-    @IBOutlet weak var addItemButton: UIButton!
-    
-    // MARK: Actions
-    @IBAction func cancel(_ sender: Any) {
-        //if cancel from AddMode, dismiss
-        let isPresentingInAddToDoMode = presentingViewController is UINavigationController
-        
-        if isPresentingInAddToDoMode {
-            dismiss(animated: true, completion: nil)
-        }
-        //if cancel from editing mode, pop the controller
-        else if let owningNavigationController = navigationController{
-            owningNavigationController.popViewController(animated: true)
-        }
-    }
+    @IBOutlet weak var titleTextField: UITextField!
 
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         myTableView.backgroundColor = UIColor.white
@@ -42,7 +29,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         //Delegate for TextFields
         titleTextField.delegate = self
         detailedInfoTextField.delegate = self
-        // Set up views if editing an existing Meal.
+        
         if let todo = todo {
             if todo.listTitle != ""{
                 navigationItem.title = "\(todo.listTitle)"
@@ -54,7 +41,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         if (titleTextField.text?.isEmpty)!{
             saveButton.isEnabled = false
         }
-        
         isNew()
     }
     
@@ -66,23 +52,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         super.didReceiveMemoryWarning()
     }
 
-    //MARK: UITextFieldDelegate
-    //Hide the keyboard when pressed return
+    // MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        //Assigning each textfield seperately
         if textField == titleTextField{
             addListTitle()
-        } else if textField == detailedInfoTextField {
+        } else {
             addListItem(textField.text!)
         }
     }
     
-    //Disable Save button if textfield is empty
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         if titleTextField.text != ""{
@@ -92,14 +75,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         return true
     }
-
-    // Setting tableview
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         let myToDo = todo?.listItems
         if myToDo != nil {
             return (myToDo?.count)!
@@ -112,8 +89,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         // Change color for alternate cells
         if indexPath.row % 2 == 0{
             cell.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1)
-
-
         } else {
             cell.backgroundColor = UIColor(red: 255/255, green: 205/255, blue: 210/255, alpha: 1)
         }
@@ -124,6 +99,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "detailCell", for: indexPath) as? DetailTableViewCell  else {
             fatalError()
         }
+        
         // Round corners with shadows
         cell.layer.cornerRadius = 10
         let shadowPath2 = UIBezierPath(rect: cell.bounds)
@@ -137,7 +113,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let myTodo = todo
 
         if myTodo != nil {
-            print(indexPath.row)
             cell.detailLabel.text = myTodo!.listItems[indexPath.row]
         }
         
@@ -162,17 +137,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         tableView.reloadData()
     }
     
-    func isNew(){
-        if !(todo?.listTitle.isEmpty)! {
-            titleTextField.isHidden = true
-            titleAddButtonOutlet.isHidden = true
-            detailedInfoTextField.isHidden = false
-            addItemButton.isHidden = false
-        } else {
-            titleTextField.isHidden = false
-            titleAddButtonOutlet.isHidden = false
-            detailedInfoTextField.isHidden = true
-            addItemButton.isHidden = true
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            //Delete row and update
+            tableView.beginUpdates()
+            todo?.listItems.remove(at: indexPath.row)
+            todo?.isCompleted.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.endUpdates()
+            tableView.reloadData()
         }
     }
 
@@ -193,6 +170,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
     }
     
+    // MARK: Actions
     @IBAction func addDetailButton(_ sender: Any) {
         addListItem(detailedInfoTextField.text!)
     }
@@ -201,6 +179,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         addListTitle()
     }
     
+    @IBAction func cancel(_ sender: Any) {
+        //if cancel from AddMode, dismiss
+        let isPresentingInAddToDoMode = presentingViewController is UINavigationController
+        
+        if isPresentingInAddToDoMode {
+            dismiss(animated: true, completion: nil)
+        } else if let owningNavigationController = navigationController{
+            owningNavigationController.popViewController(animated: true)
+        }
+    }
+    
+    // MARK: Functions
     func addListTitle() {
         if titleTextField.text == "" {
             print("empty textfield")
@@ -225,19 +215,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         view.endEditing(true)
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
-            //Delete row and update
-            tableView.beginUpdates()
-            todo?.listItems.remove(at: indexPath.row)
-            todo?.isCompleted.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.endUpdates()
-            tableView.reloadData()
+    func isNew() {
+        if !(todo?.listTitle.isEmpty)! {
+            titleTextField.isHidden = true
+            titleAddButtonOutlet.isHidden = true
+            detailedInfoTextField.isHidden = false
+            addItemButton.isHidden = false
+        } else {
+            titleTextField.isHidden = false
+            titleAddButtonOutlet.isHidden = false
+            detailedInfoTextField.isHidden = true
+            addItemButton.isHidden = true
         }
     }
 }
