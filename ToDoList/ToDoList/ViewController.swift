@@ -17,8 +17,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var detailedInfoTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBAction func detailCheckButton(_ sender: UIButton) {
-    }
+
+    @IBOutlet weak var addItemButton: UIButton!
     @IBAction func cancel(_ sender: Any) {
         //if cancel from AddMode, dismiss
         let isPresentingInAddToDoMode = presentingViewController is UINavigationController
@@ -34,17 +34,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        myTableView.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1)
+
         //Delegate for TextFields
         titleTextField.delegate = self
         detailedInfoTextField.delegate = self
         // Set up views if editing an existing Meal.
         if let todo = todo {
-            navigationItem.title = "\(todo.title) List"
-            titleTextField.text = todo.title
+            if todo.listTitle != ""{
+                navigationItem.title = "\(todo.listTitle)"
+                titleTextField.text = todo.listTitle
+            } else {
+                navigationItem.title = "New List"
+            }
         }
+        
         if (titleTextField.text?.isEmpty)!{
             saveButton.isEnabled = false
         }
+        
+        isNew()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        isNew()
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,10 +74,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func textFieldDidEndEditing(_ textField: UITextField) {
         //Assigning each textfield seperately
         if textField == titleTextField{
-            navigationItem.title = "\(todo!.title) List"
-        }
-        else if textField == detailedInfoTextField {
+            navigationItem.title = "\(titleTextField.text ?? "")"
+            titleTextField.isHidden = true
+            detailedInfoTextField.isHidden = false
+            addItemButton.isHidden = false
+        } else if textField == detailedInfoTextField {
             detailedInfoTextField.text = textField.text
+            addListItem()
         }
     }
     
@@ -86,7 +102,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        let myToDo = todo?.detail
+        let myToDo = todo?.listItems
         if myToDo != nil {
             return (myToDo?.count)!
         } else {
@@ -97,9 +113,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // Change color for alternate cells
         if indexPath.row % 2 == 0{
-            cell.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+            cell.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1)
+
+
         } else {
-            cell.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+            cell.backgroundColor = UIColor(red: 255/255, green: 205/255, blue: 210/255, alpha: 1)
         }
     }
     
@@ -119,7 +137,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
         if myTodo != nil {
             print(indexPath.row)
-            cell.detailLabel.text = myTodo!.detail[indexPath.row]
+            cell.detailLabel.text = myTodo!.listItems[indexPath.row]
         }
         
         if myTodo?.isCompleted[indexPath.row] == false {
@@ -145,6 +163,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         tableView.reloadData()
     }
+    
+    func isNew(){
+        if !(todo?.listTitle.isEmpty)! {
+            titleTextField.isHidden = true
+            detailedInfoTextField.isHidden = false
+            addItemButton.isHidden = false
+        } else {
+            titleTextField.isHidden = false
+            detailedInfoTextField.isHidden = true
+            addItemButton.isHidden = true
+        }
+    }
 
     //MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -155,21 +185,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         let title = titleTextField.text ?? ""
 
-        if todo?.detail == nil {
+        if todo?.listItems == nil {
             let detail = detailedInfoTextField.text ?? ""
-            todo = ToDo(title: title, detail: [detail], isCompleted: [])
+            todo = ToDo(listTitle: title, listItems: [detail], isCompleted: [])
         } else {
-            todo = ToDo(title: title, detail: (todo?.detail)!, isCompleted: (todo?.isCompleted)!)
+            todo = ToDo(listTitle: title, listItems: (todo?.listItems)!, isCompleted: (todo?.isCompleted)!)
         }
     }
     
     @IBAction func addDetailButton(_ sender: Any) {
+        addListItem()
+    }
+    
+    func addListItem() {
         let myDetail = detailedInfoTextField.text
-
+        
         if detailedInfoTextField.text == ""{
             print("empty textfield")
         } else {
-            todo?.detail.append(myDetail!)
+            todo?.listItems.append(myDetail!)
             todo?.isCompleted.append(false)
         }
         myTableView.reloadData()
@@ -185,7 +219,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         if (editingStyle == UITableViewCellEditingStyle.delete) {
             //Delete row and update
             tableView.beginUpdates()
-            todo?.detail.remove(at: indexPath.row)
+            todo?.listItems.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.endUpdates()
             tableView.reloadData()

@@ -10,25 +10,25 @@ import Foundation
 import UIKit
 
 class ToDo: NSObject, NSCoding{
-    var title: String
-    var detail: [String]
+    var listTitle: String
+    var listItems: [String]
     var isCompleted: [Bool]
     
-    init?(title: String, detail: [String], isCompleted: [Bool]){
-        self.title = title
-        self.detail = detail
+    init?(listTitle: String, listItems: [String], isCompleted: [Bool]){
+        self.listTitle = listTitle
+        self.listItems = listItems
         self.isCompleted = isCompleted
     }
     
     required init(coder decoder: NSCoder) {
-        self.title = decoder.decodeObject(forKey: "title") as? String ?? ""
-        self.detail = decoder.decodeObject(forKey: "detail") as? [String] ?? []
+        self.listTitle = decoder.decodeObject(forKey: "listTitle") as? String ?? ""
+        self.listItems = decoder.decodeObject(forKey: "listItems") as? [String] ?? []
         self.isCompleted = decoder.decodeObject(forKey: "isCompleted") as? [Bool] ?? []
     }
     
     func encode(with coder: NSCoder) {
-        coder.encode(title, forKey: "title")
-        coder.encode(detail, forKey: "detail")
+        coder.encode(listTitle, forKey: "listTitle")
+        coder.encode(listItems, forKey: "listItems")
         coder.encode(isCompleted, forKey: "isCompleted")
     }
 }
