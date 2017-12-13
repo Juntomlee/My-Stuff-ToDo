@@ -10,15 +10,18 @@ import UIKit
 import UserNotifications
 
 class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
-    //MARK: Properties
+    // MARK: Properties
     var todo: ToDo? //Setting a variable "todo" for ToDo class
     
+    // MARK: Outlets
     @IBOutlet weak var myTableView: UITableView!//setting Outlet for myTableView
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var detailedInfoTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-
+    @IBOutlet weak var titleAddButtonOutlet: UIButton!
     @IBOutlet weak var addItemButton: UIButton!
+    
+    // MARK: Actions
     @IBAction func cancel(_ sender: Any) {
         //if cancel from AddMode, dismiss
         let isPresentingInAddToDoMode = presentingViewController is UINavigationController
@@ -34,7 +37,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        myTableView.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1)
+        myTableView.backgroundColor = UIColor.white
 
         //Delegate for TextFields
         titleTextField.delegate = self
@@ -48,7 +51,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 navigationItem.title = "New List"
             }
         }
-        
         if (titleTextField.text?.isEmpty)!{
             saveButton.isEnabled = false
         }
@@ -74,13 +76,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func textFieldDidEndEditing(_ textField: UITextField) {
         //Assigning each textfield seperately
         if textField == titleTextField{
-            navigationItem.title = "\(titleTextField.text ?? "")"
-            titleTextField.isHidden = true
-            detailedInfoTextField.isHidden = false
-            addItemButton.isHidden = false
+            addListTitle()
         } else if textField == detailedInfoTextField {
-            detailedInfoTextField.text = textField.text
-            addListItem()
+            addListItem(textField.text!)
         }
     }
     
@@ -123,15 +121,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cellIdentifier = "detailCell"
-        print("passed cellidentifier")
-        //Downcast to ToDoTableViewCell
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? DetailTableViewCell  else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "detailCell", for: indexPath) as? DetailTableViewCell  else {
             fatalError()
         }
+        // Round corners with shadows
+        cell.layer.cornerRadius = 10
+        let shadowPath2 = UIBezierPath(rect: cell.bounds)
+        cell.layer.masksToBounds = false
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOffset = CGSize(width: CGFloat(1.0), height: CGFloat(3.0))
+        cell.layer.shadowOpacity = 0.5
+        cell.layer.shadowPath = shadowPath2.cgPath
         
-        print("IndexPath", indexPath.row)
         //set todo constant to have value of todoArray
         let myTodo = todo
 
@@ -147,18 +148,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         return cell
     }
-
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.cellForRow(at: indexPath) != nil {
-            if tableView.cellForRow(at: indexPath) != nil {
-                if todo?.isCompleted[indexPath.row] == true {
-                    todo?.isCompleted[indexPath.row] = false
-                    navigationItem.leftBarButtonItem?.isEnabled = false
-                } else {
-                    todo?.isCompleted[indexPath.row] = true
-                    navigationItem.leftBarButtonItem?.isEnabled = false
-                }
+            if todo?.isCompleted[indexPath.row] == true {
+                todo?.isCompleted[indexPath.row] = false
+                navigationItem.leftBarButtonItem?.isEnabled = false
+            } else {
+                todo?.isCompleted[indexPath.row] = true
+                navigationItem.leftBarButtonItem?.isEnabled = false
             }
         }
         tableView.reloadData()
@@ -167,10 +165,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func isNew(){
         if !(todo?.listTitle.isEmpty)! {
             titleTextField.isHidden = true
+            titleAddButtonOutlet.isHidden = true
             detailedInfoTextField.isHidden = false
             addItemButton.isHidden = false
         } else {
             titleTextField.isHidden = false
+            titleAddButtonOutlet.isHidden = false
             detailedInfoTextField.isHidden = true
             addItemButton.isHidden = true
         }
@@ -194,16 +194,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @IBAction func addDetailButton(_ sender: Any) {
-        addListItem()
+        addListItem(detailedInfoTextField.text!)
     }
     
-    func addListItem() {
-        let myDetail = detailedInfoTextField.text
-        
+    @IBAction func addTitleButton(_ sender: Any) {
+        addListTitle()
+    }
+    
+    func addListTitle() {
+        if titleTextField.text == "" {
+            print("empty textfield")
+        } else {
+            navigationItem.title = "\(titleTextField.text ?? "")"
+            titleTextField.isHidden = true
+            titleAddButtonOutlet.isHidden = true
+            detailedInfoTextField.isHidden = false
+            addItemButton.isHidden = false
+        }
+    }
+    
+    func addListItem(_ listItem: String) {
         if detailedInfoTextField.text == ""{
             print("empty textfield")
         } else {
-            todo?.listItems.append(myDetail!)
+            todo?.listItems.append(listItem)
             todo?.isCompleted.append(false)
         }
         myTableView.reloadData()
@@ -220,6 +234,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             //Delete row and update
             tableView.beginUpdates()
             todo?.listItems.remove(at: indexPath.row)
+            todo?.isCompleted.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.endUpdates()
             tableView.reloadData()

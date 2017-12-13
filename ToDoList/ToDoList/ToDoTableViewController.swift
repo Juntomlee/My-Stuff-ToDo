@@ -45,7 +45,9 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1)
+//        tableView.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1)
+        tableView.backgroundColor = UIColor.white
+
 //        loadSampleTodos() //Load sample ToDos when starting the app
         
         if let savedTodo = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [ToDo] {
@@ -91,7 +93,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // One section
         return 1
     }
 
@@ -103,10 +104,8 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // Change color for alternate cells
         if indexPath.row % 2 == 0{
-//            cell.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
             cell.layer.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1).cgColor
         } else {
-//            cell.backgroundColor = UIColor.white.withAlphaComponent(0.3)
             cell.layer.backgroundColor = UIColor(red: 255/255, green: 205/255, blue: 210/255, alpha: 1).cgColor
         }
     }
@@ -114,6 +113,24 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! ToDoTableViewCell
+        
+        // Round corners with shadows
+        cell.layer.cornerRadius = 10
+        let shadowPath2 = UIBezierPath(rect: cell.bounds)
+        cell.layer.masksToBounds = false
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOffset = CGSize(width: CGFloat(1.0), height: CGFloat(3.0))
+        cell.layer.shadowOpacity = 0.5
+        cell.layer.shadowPath = shadowPath2.cgPath
+        
+        // Background
+        let backgroundView = UIView()
+        if indexPath.row % 2 == 0 {
+            backgroundView.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1)
+        } else {
+            backgroundView.backgroundColor = UIColor(red: 255/255, green: 205/255, blue: 210/255, alpha: 1)
+        }
+        cell.selectedBackgroundView = backgroundView
         
         var imageView : UIImageView
         imageView = UIImageView(frame:CGRect(x:0, y:0, width:15, height:15))
@@ -147,12 +164,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         return true
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.delete {
-
-        }
-    }
-    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete" , handler: { (action:UITableViewRowAction, indexPath: IndexPath) -> Void in
             tableView.beginUpdates()
@@ -165,8 +176,9 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         let reminderAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Reminder" , handler: { (action:UITableViewRowAction, indexPath: IndexPath) -> Void in
             self.selectTimeForReminder(indexPath.row)
         })
-        deleteAction.backgroundColor = UIColor.red
-        reminderAction.backgroundColor = UIColor.blue
+        deleteAction.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 0.3)
+        reminderAction.backgroundColor = UIColor(red: 255/255, green: 205/255, blue: 210/255, alpha: 0.9)
+
         return [deleteAction,reminderAction]
     }
 
