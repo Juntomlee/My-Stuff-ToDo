@@ -63,17 +63,41 @@
 			isa = PBXGroup;
 			children = (
 				BF7DE36E1F7AC99F00018223 /* AppDelegate.swift */,
-				BF7DE3701F7AC99F00018223 /* ViewController.swift */,
-				BF92802E1F7C7A38006C0E85 /* DetailTableViewCell.swift */,
-				BF7DE3801F7ACE7D00018223 /* ToDoTableViewController.swift */,
-				BF7DE3841F7ADE9100018223 /* ToDoTableViewCell.swift */,
-				BF7DE3821F7ADBA000018223 /* ToDo.swift */,
+				BFB8D1541FE19EFB00EFF68E /* Class */,
+				BFB8D1531FE19EEB00EFF68E /* MainTableView */,
+				BFB8D1521FE19ED700EFF68E /* DetailTableView */,
 				BF7DE3721F7AC99F00018223 /* Main.storyboard */,
 				BF7DE3751F7AC99F00018223 /* Assets.xcassets */,
 				BF7DE3771F7AC99F00018223 /* LaunchScreen.storyboard */,
 				BF7DE37A1F7AC99F00018223 /* Info.plist */,
 			);
 			path = ToDoList;
+			sourceTree = "<group>";
+		};
+		BFB8D1521FE19ED700EFF68E /* DetailTableView */ = {
+			isa = PBXGroup;
+			children = (
+				BF92802E1F7C7A38006C0E85 /* DetailTableViewCell.swift */,
+				BF7DE3701F7AC99F00018223 /* ViewController.swift */,
+			);
+			path = DetailTableView;
+			sourceTree = "<group>";
+		};
+		BFB8D1531FE19EEB00EFF68E /* MainTableView */ = {
+			isa = PBXGroup;
+			children = (
+				BF7DE3801F7ACE7D00018223 /* ToDoTableViewController.swift */,
+				BF7DE3841F7ADE9100018223 /* ToDoTableViewCell.swift */,
+			);
+			path = MainTableView;
+			sourceTree = "<group>";
+		};
+		BFB8D1541FE19EFB00EFF68E /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				BF7DE3821F7ADBA000018223 /* ToDo.swift */,
+			);
+			path = Class;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

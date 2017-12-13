@@ -148,7 +148,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
-        switch(segue.identifier ?? "") {
+        switch segue.identifier ?? "" {
         case "AddItem":
             guard let todoDetailViewController = segue.destination as? ViewController else {
                 fatalError()
@@ -156,7 +156,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
             let newArray = ToDo(listTitle: "", listItems: [], isCompleted: [])
             todoDetailViewController.todo = newArray
             
-        case "ShowDetail":
+        case "showDetail":
             guard let todoDetailViewController = segue.destination as? ViewController else {
                 fatalError()
             }
