@@ -34,7 +34,7 @@
 
 ## App screenshots
 
-<img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Mainlist.PNG" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Detailitemlist.PNG" width="250">
+<img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Mainlist_V1.1.png" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Detailitemlist_V1.1.png" width="250">
 
 
 ## Built With
