@@ -25,7 +25,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundColor = UIColor.white
-//        loadSampleTodos() //Load sample ToDos when starting the app
+        loadSampleTodos() //Load sample ToDos when starting the app
         
         load()
         
@@ -156,7 +156,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
             let newArray = ToDo(listTitle: "", listItems: [], isCompleted: [])
             todoDetailViewController.todo = newArray
             
-        case "showDetail":
+        case "ShowDetail":
             guard let todoDetailViewController = segue.destination as? ViewController else {
                 fatalError()
             }
@@ -166,7 +166,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
             guard let indexPath = tableView.indexPath(for: selectedTodoCell) else {
                 fatalError()
             }
-            
             let selectedToDo = todoArray[indexPath.row]
             todoDetailViewController.todo = selectedToDo
 
@@ -299,7 +298,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
             self.present(alertController, animated: true, completion: nil)
             let when = DispatchTime.now() + 2
             DispatchQueue.main.asyncAfter(deadline: when){
-                // your code with delay
                 alertController.dismiss(animated: true, completion: nil)
             }
         })
