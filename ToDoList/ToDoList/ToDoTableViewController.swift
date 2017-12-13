@@ -105,7 +105,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         let todo = todoArray[indexPath.row]
         
         //assign value to titlelabel
-//        cell.titleLabel.text = todo.listTitle
+        cell.titleLabel.text = todo.listTitle
         let numberOfItemsLeft = todo.isCompleted.filter{$0 == false}.count
         
         switch numberOfItemsLeft {

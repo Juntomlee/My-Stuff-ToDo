@@ -100,6 +100,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             fatalError()
         }
         
+        
         // Round corners with shadows
         cell.layer.cornerRadius = 10
         let shadowPath2 = UIBezierPath(rect: cell.bounds)
