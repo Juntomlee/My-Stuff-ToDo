@@ -77,8 +77,8 @@
 		BFB8D1521FE19ED700EFF68E /* DetailTableView */ = {
 			isa = PBXGroup;
 			children = (
-				BF92802E1F7C7A38006C0E85 /* DetailTableViewCell.swift */,
 				BF7DE3701F7AC99F00018223 /* ViewController.swift */,
+				BF92802E1F7C7A38006C0E85 /* DetailTableViewCell.swift */,
 			);
 			path = DetailTableView;
 			sourceTree = "<group>";

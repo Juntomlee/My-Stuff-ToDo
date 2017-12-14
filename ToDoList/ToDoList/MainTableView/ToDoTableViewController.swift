@@ -39,6 +39,10 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func viewDidAppear(_ animated: Bool) {
         save(todoArray)
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
 
     // Become FirstResponder when motion detected
     override var canBecomeFirstResponder: Bool {
@@ -55,10 +59,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Total number of todos object
@@ -66,7 +66,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     }
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Change color for alternate cells
         if indexPath.row % 2 == 0{
             cell.layer.backgroundColor = UIColor(red: 239/255, green: 154/255, blue: 154/255, alpha: 1).cgColor
         } else {
@@ -80,12 +79,10 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         
         // Round corners with shadows
         cell.layer.cornerRadius = 10
-        let shadowPath2 = UIBezierPath(rect: cell.bounds)
         cell.layer.masksToBounds = false
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: CGFloat(1.0), height: CGFloat(3.0))
         cell.layer.shadowOpacity = 0.5
-        cell.layer.shadowPath = shadowPath2.cgPath
         
         // Background
         let backgroundView = UIView()

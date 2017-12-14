@@ -77,9 +77,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let myToDo = todo?.listItems
-        if myToDo != nil {
-            return (myToDo?.count)!
+        let todoItems = todo?.listItems
+        if todoItems != nil {
+            return (todoItems?.count)!
         } else {
             return 0
         }
@@ -100,26 +100,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             fatalError()
         }
         
-        
         // Round corners with shadows
         cell.layer.cornerRadius = 10
-        let shadowPath2 = UIBezierPath(rect: cell.bounds)
         cell.layer.masksToBounds = false
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: CGFloat(1.0), height: CGFloat(3.0))
         cell.layer.shadowOpacity = 0.5
-        cell.layer.shadowPath = shadowPath2.cgPath
         
-        //set todo constant to have value of todoArray
-        let myTodo = todo
-
-        if myTodo != nil {
-            cell.detailLabel.text = myTodo!.listItems[indexPath.row]
+        if todo != nil {
+            cell.detailLabel.text = todo!.listItems[indexPath.row]
         }
         
-        if myTodo?.isCompleted[indexPath.row] == false {
+        if todo?.isCompleted[indexPath.row] == false {
             cell.detailCheckButton.isSelected = false
-        } else if myTodo?.isCompleted[indexPath.row] == true {
+        } else if todo?.isCompleted[indexPath.row] == true {
             cell.detailCheckButton.isSelected = true
         }
         return cell
@@ -156,7 +150,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
     //MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender) //
+        super.prepare(for: segue, sender: sender)
         
         guard let button = sender as? UIBarButtonItem, button === saveButton else {
             return
