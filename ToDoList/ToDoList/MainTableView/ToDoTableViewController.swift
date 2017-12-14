@@ -25,9 +25,9 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundColor = UIColor.white
-        loadSampleTodos() //Load sample ToDos when starting the app
+//        loadSampleTodos() //Load sample ToDos when starting the app
         
-        load()
+        loadData()
         
         //Request Authorization for notification
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge], completionHandler: {didallow, error in })
@@ -248,7 +248,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         save(todoArray)
     }
     
-    private func load() {
+    private func loadData() {
         if let savedTodo = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [ToDo] {
             todoArray = savedTodo
         }
@@ -260,7 +260,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     
     func sortList() {
         todoArray.sort(){$0.isCompleted.filter{$0 == false}.count > $1.isCompleted.filter{$0 == false}.count}
-        // notify the table view the data has changed
         tableView.reloadData()
     }
     
@@ -275,7 +274,6 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         pickerView.dataSource = self
         pickerView.delegate = self
         
-        // comment this line to use white color
         pickerView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         
         alertView.view.addSubview(pickerView)

@@ -9,7 +9,7 @@
 import UIKit
 
 class ToDoTableViewCell: UITableViewCell {
-    //MARK: Properties
+    //MARK: Outlets
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var checkBoxButton: UIButton!

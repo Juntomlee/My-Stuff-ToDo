@@ -193,9 +193,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     // MARK: Functions
     func addListTitle() {
-        if titleTextField.text == "" {
-            print("empty textfield")
-        } else {
+        if titleTextField.text != "" {
             navigationItem.title = "\(titleTextField.text ?? "")"
             titleTextField.isHidden = true
             titleAddButtonOutlet.isHidden = true
@@ -205,9 +203,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func addListItem(_ listItem: String) {
-        if detailedInfoTextField.text == ""{
-            print("empty textfield")
-        } else {
+        if detailedInfoTextField.text != ""{
             todo?.listItems.append(listItem)
             todo?.isCompleted.append(false)
         }
