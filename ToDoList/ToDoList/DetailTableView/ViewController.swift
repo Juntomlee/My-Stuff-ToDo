@@ -52,7 +52,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         super.didReceiveMemoryWarning()
     }
 
-    // MARK: UITextFieldDelegate
+    // MARK: UITextField Delegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -76,6 +76,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         return true
     }
     
+    // MARK: Table View DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let todoItems = todo?.listItems
         if todoItems != nil {
@@ -220,4 +221,3 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
     }
 }
-

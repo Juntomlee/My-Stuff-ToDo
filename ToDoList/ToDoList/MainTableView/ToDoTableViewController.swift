@@ -59,7 +59,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         }
     }
 
-    // MARK: - Table view data source
+    // MARK: Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Total number of todos object
         return todoList.count
@@ -141,7 +141,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         return [deleteAction,reminderAction]
     }
 
-    // MARK: - Navigation
+    // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
@@ -210,14 +210,12 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     //MARK: Actions
     @IBAction func unwindToToDoList(sender: UIStoryboardSegue) {
         if let sourceViewController = sender.source as? ViewController, let retrieveTodo = sourceViewController.todo{
-            print(retrieveTodo.listTitle)
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing todo
                 todoList[selectedIndexPath.row] = retrieveTodo
                 tableView.reloadRows(at: [selectedIndexPath], with: .none)
                 let encodedData = NSKeyedArchiver.archivedData(withRootObject: todoList)
                 UserDefaults.standard.set(encodedData, forKey: "todoArray")
-                
             } else {
                 // new todo
                 let newIndexPath = IndexPath(row: todoList.count, section: 0)
