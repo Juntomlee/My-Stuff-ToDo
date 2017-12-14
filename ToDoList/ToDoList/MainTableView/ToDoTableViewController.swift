@@ -18,7 +18,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         return (url!.appendingPathComponent("Data").path)
     }
     var reminderTime: Double = 600
-    var todoArray = [ToDo]()
+    var todoList = [ToDo]()
     var times = ["10min", "30min", "1hr", "2hr", "3hr", "6hr", "12hr", "24hr"]
     
     // MARK: Lifecycle
@@ -37,7 +37,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        save(todoArray)
+        save(todoList)
     }
     
     override func didReceiveMemoryWarning() {
@@ -55,14 +55,14 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             sortList()
-            save(todoArray)
+            save(todoList)
         }
     }
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Total number of todos object
-        return todoArray.count
+        return todoList.count
     }
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -99,7 +99,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         cell.accessoryView = imageView
         
         //set todo constant to have value of todos array at indexpath.row
-        let todo = todoArray[indexPath.row]
+        let todo = todoList[indexPath.row]
         
         //assign value to titlelabel
         cell.titleLabel.text = todo.listTitle
@@ -126,11 +126,11 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete" , handler: { (action:UITableViewRowAction, indexPath: IndexPath) -> Void in
             tableView.beginUpdates()
-            self.todoArray.remove(at: indexPath.row)
+            self.todoList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.endUpdates()
             tableView.reloadData()
-            self.save(self.todoArray)
+            self.save(self.todoList)
         })
         let reminderAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Reminder" , handler: { (action:UITableViewRowAction, indexPath: IndexPath) -> Void in
             self.selectTimeForReminder(indexPath.row)
@@ -163,7 +163,7 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
             guard let indexPath = tableView.indexPath(for: selectedTodoCell) else {
                 fatalError()
             }
-            let selectedToDo = todoArray[indexPath.row]
+            let selectedToDo = todoList[indexPath.row]
             todoDetailViewController.todo = selectedToDo
 
         default:
@@ -213,18 +213,18 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
             print(retrieveTodo.listTitle)
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing todo
-                todoArray[selectedIndexPath.row] = retrieveTodo
+                todoList[selectedIndexPath.row] = retrieveTodo
                 tableView.reloadRows(at: [selectedIndexPath], with: .none)
-                let encodedData = NSKeyedArchiver.archivedData(withRootObject: todoArray)
+                let encodedData = NSKeyedArchiver.archivedData(withRootObject: todoList)
                 UserDefaults.standard.set(encodedData, forKey: "todoArray")
                 
             } else {
                 // new todo
-                let newIndexPath = IndexPath(row: todoArray.count, section: 0)
-                todoArray.append(retrieveTodo)
+                let newIndexPath = IndexPath(row: todoList.count, section: 0)
+                todoList.append(retrieveTodo)
                 
                 tableView.insertRows(at: [newIndexPath], with: .automatic)
-                let encodedData = NSKeyedArchiver.archivedData(withRootObject: todoArray)
+                let encodedData = NSKeyedArchiver.archivedData(withRootObject: todoList)
                 UserDefaults.standard.set(encodedData, forKey: "todoArray")
             }
         }
@@ -241,22 +241,22 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         guard let todo3 = ToDo(listTitle: "Grocery Shopping", listItems: ["Fruit", "Scallop", "Chips", "Beer"], isCompleted: [false, true, true, true]) else {
             fatalError("Unable to instantiate todo3")
         }
-        todoArray += [todo1, todo2, todo3]
-        save(todoArray)
+        todoList += [todo1, todo2, todo3]
+        save(todoList)
     }
     
     private func loadData() {
         if let savedTodo = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [ToDo] {
-            todoArray = savedTodo
+            todoList = savedTodo
         }
     }
     
     private func save(_ item: [ToDo]) {
-        NSKeyedArchiver.archiveRootObject(todoArray, toFile: filePath)
+        NSKeyedArchiver.archiveRootObject(todoList, toFile: filePath)
     }
     
     func sortList() {
-        todoArray.sort(){$0.isCompleted.filter{$0 == false}.count > $1.isCompleted.filter{$0 == false}.count}
+        todoList.sort(){$0.isCompleted.filter{$0 == false}.count > $1.isCompleted.filter{$0 == false}.count}
         tableView.reloadData()
     }
     
@@ -278,12 +278,12 @@ class ToDoTableViewController: UITableViewController, UIPickerViewDelegate, UIPi
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {
             (result : UIAlertAction) -> Void in
             let todoContent = UNMutableNotificationContent()
-            todoContent.title = self.todoArray[(selectedIndex)].listTitle
-            todoContent.body = "You have " + "\(self.todoArray[(selectedIndex)].isCompleted.filter{$0 == false}.count)" + " item(s) left."
+            todoContent.title = self.todoList[(selectedIndex)].listTitle
+            todoContent.body = "You have " + "\(self.todoList[(selectedIndex)].isCompleted.filter{$0 == false}.count)" + " item(s) left."
             todoContent.badge = 1
             
             let todoTrigger = UNTimeIntervalNotificationTrigger(timeInterval: self.reminderTime, repeats: false)
-            let todoRequest = UNNotificationRequest(identifier: self.todoArray[selectedIndex].listTitle, content: todoContent, trigger: todoTrigger)
+            let todoRequest = UNNotificationRequest(identifier: self.todoList[selectedIndex].listTitle, content: todoContent, trigger: todoTrigger)
             
             UNUserNotificationCenter.current().add(todoRequest, withCompletionHandler: nil)
             
