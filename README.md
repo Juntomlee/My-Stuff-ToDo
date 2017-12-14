@@ -14,6 +14,12 @@
 
 - iOS 11 or later
 
+
+## Version History
+- V1.0: First version
+- V1.1: New UI, user can adjust time for reminder, bug fixes
+
+
 ## Technologies
 
 - UIKit
@@ -34,7 +40,7 @@
 
 ## App screenshots
 
-<img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Mainlist.PNG" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Detailitemlist.PNG" width="250">
+<img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Mainlist_V1.1.png" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Detailitemlist_V1.1.png" width="250">
 
 
 ## Built With
