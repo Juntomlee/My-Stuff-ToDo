@@ -1,13 +1,13 @@
-# komatodo_app
-- Simple ToDo App with touch of "Kokomato" character
+# My Stuff ToDo
+- Minimalistic ToDo Application
 
 
 ## App Store Link
-- https://itunes.apple.com/us/app/koma-todo/id1292154654?mt=8
+- https://itunes.apple.com/us/app/my-stuff-todo/id1292154654?mt=8
 
 
 ## About
-- Simple ToDo App with touch of "Kokomato" character
+- Minimalistic ToDo Application
 
 
 ## Prerequisites
@@ -18,6 +18,7 @@
 ## Version History
 - V1.0: First version
 - V1.1: New UI, user can adjust time for reminder, bug fixes
+- V1.2: New UI, bug fixes
 
 
 ## Technologies
@@ -40,7 +41,7 @@
 
 ## App screenshots
 
-<img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Mainlist_V1.1.png" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Detailitemlist_V1.1.png" width="250">
+<img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Mainlist_V1.2.png" width="250"/> <img src="https://raw.githubusercontent.com/Juntomlee/komatodo_app/master/Screenshots/Detailitemlist_V1.2.png" width="250">
 
 
 ## Built With
